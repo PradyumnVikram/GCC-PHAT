@@ -171,8 +171,8 @@ def simple_analysis():
     print("=" * 60)
     
     # Your file names
-    reference_file = "/home/ramdaftari/code/GCC-PHAT/Test_Audio/B_R-vocals.mp3"
-    delayed_file = "/home/ramdaftari/code/GCC-PHAT/Test_Audio/output.mp3"
+    reference_file = "/home/pradyumnvikram/GCC-PHAT/Test_Audio/B_R-vocals.mp3"
+    delayed_file = "/home/pradyumnvikram/GCC-PHAT/Test_Audio/output.mp3"
     
     # Check if files exist
     if not os.path.exists(reference_file):
