@@ -1,4 +1,5 @@
 import numpy as np
+from tdoa import find_delay_between_mp3s
 
 
 speed_of_sound = 343.0  
@@ -46,14 +47,42 @@ def estimate_3d_coordinates(measured_tdoas):
     best_point = grid_points[best_index]
     return best_point * 100  
 
-input_tdoas = {
-    (0,1): 0.000123,
-    (0,2): 0.000111,
-    (0,3): 0.000130,
-    (1,2): 0.000020,
-    (1,3): 0.000025,
-    (2,3): 0.000011
-}
+if __name__ == "__main__":
 
-estimated_position_cm = estimate_3d_coordinates(input_tdoas)
-print("Estimated source position (cm):", estimated_position_cm)
+    #path to all the mics or some function to get input from each individual mic will come here
+    #currently it contains the path to the test audio files
+    mics = ["/home/pradyumnvikram/GCC-PHAT/Test_Audio/B_R-vocals.mp3",
+            "/home/pradyumnvikram/GCC-PHAT/Test_Audio/B_R-vocals.mp3",
+            "/home/pradyumnvikram/GCC-PHAT/Test_Audio/B_R-vocals.mp3",
+            "/home/pradyumnvikram/GCC-PHAT/Test_Audio/B_R-vocals.mp3"]
+
+    input_tdoas = {}
+
+    for i in range(4):
+        for j in range(i, 4):
+            if i!=j:
+                input_tdoas[(i,j)], _ = find_delay_between_mp3s(mics[i], mics[j], max_tau=5.0, analysis_length=30)[0]
+
+
+    #once we get the mics and set it up the code below will be removed and only estimated_position_cm will run
+    #only dummy variables set here to verify working of functions
+    reference_file = "/home/pradyumnvikram/GCC-PHAT/Test_Audio/B_R-vocals.mp3"
+    delayed_file = "/home/pradyumnvikram/GCC-PHAT/Test_Audio/output.mp3"
+    delay, _ = find_delay_between_mp3s(
+            reference_file, 
+            delayed_file, 
+            max_tau=5.0,      
+            analysis_length=30 
+        )
+
+    input_tdoas = {
+        (0,1): 0.000123,
+        (0,2): 0.000111,
+        (0,3): 0.000130,
+        (1,2): 0.000020,
+        (1,3): 0.000025,
+        (2,3): 0.000011
+    }
+    
+    estimated_position_cm = estimate_3d_coordinates(input_tdoas)
+    print("Estimated source position (cm):", estimated_position_cm)
